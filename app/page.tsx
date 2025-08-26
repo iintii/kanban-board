@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Column from "@/components/Column";
 import { mockCards, mockCols } from "@/public/data";
@@ -21,7 +22,12 @@ const HomePage = () => {
 
       <div className="flex gap-4 overflow-x-auto pb-2">
         {mockCols.map((col) => (
-          <Column key={col.id} column={col} onAddCard={handleAddCard} /> //each col
+          <Column
+            key={col.id}
+            column={col}
+            onAddCard={handleAddCard}
+            cards={cards}
+          /> //each col
         ))}
       </div>
     </div>
