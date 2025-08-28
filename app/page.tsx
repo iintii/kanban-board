@@ -13,6 +13,11 @@ const HomePage = () => {
     setCards([...cards, newCard]); // Add new card to existing cards
   };
 
+  //Deletes Cards by their ID
+  const handleDeleteCard = (cardIdToDelete: string) => {
+    setCards((cards) => cards.filter((card) => card.id !== cardIdToDelete));
+  };
+
   return (
     <div className="p-6">
       <header className="flex items-center justify-between mb-6">
@@ -26,6 +31,7 @@ const HomePage = () => {
             key={col.id}
             column={col}
             onAddCard={handleAddCard}
+            onDeleteCard={handleDeleteCard}
             cards={cards}
           /> //each col
         ))}
