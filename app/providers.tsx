@@ -1,7 +1,5 @@
-// app/providers.tsx
 "use client";
-import React from "react";
-import { NhostProvider } from "@nhost/react";
+import { NhostProvider } from "@nhost/nextjs";
 import { NhostApolloProvider } from "@nhost/react-apollo";
 import { nhost } from "@/lib/nhost";
 
