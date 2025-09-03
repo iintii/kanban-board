@@ -69,10 +69,7 @@ export const SUBSCRIBE_COLUMNS_BY_BOARD = gql`
 
 export const SUBSCRIBE_CARDS_BY_BOARD = gql`
   subscription SubscribeCardsByBoard($boardId: String!) {
-    cards(
-      where: { board_id: { _eq: $boardId } }
-      order_by: { position: asc }
-    ) {
+    cards(where: { board_id: { _eq: $boardId } }, order_by: { position: asc }) {
       id
       title
       description
@@ -100,7 +97,7 @@ export const INSERT_CARD = gql`
     $description: String
     $column_id: String!
     $board_id: String!
-    $position: Float!
+    $position: float8!
   ) {
     insert_cards_one(
       object: {
@@ -130,7 +127,7 @@ export const DELETE_CARD = gql`
 `;
 
 export const UPDATE_CARD = gql`
-  mutation UpdateCard($id: String!, $column_id: String!, $position: Float!) {
+  mutation UpdateCard($id: String!, $column_id: String!, $position: float8!) {
     update_cards_by_pk(
       pk_columns: { id: $id }
       _set: { column_id: $column_id, position: $position }
@@ -156,7 +153,7 @@ export const INSERT_COLUMN = gql`
   mutation InsertColumn(
     $id: String!
     $title: String!
-    $position: Int!
+    $position: float8!
     $board_id: String!
   ) {
     insert_columns_one(
