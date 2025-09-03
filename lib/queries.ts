@@ -69,12 +69,16 @@ export const SUBSCRIBE_COLUMNS_BY_BOARD = gql`
 
 export const SUBSCRIBE_CARDS_BY_BOARD = gql`
   subscription SubscribeCardsByBoard($boardId: String!) {
-    cards(where: { board_id: { _eq: $boardId } }) {
+    cards(
+      where: { board_id: { _eq: $boardId } }
+      order_by: { position: asc }
+    ) {
       id
       title
       description
       columnId: column_id
       board_id
+      position
     }
   }
 `;
@@ -96,6 +100,7 @@ export const INSERT_CARD = gql`
     $description: String
     $column_id: String!
     $board_id: String!
+    $position: Float!
   ) {
     insert_cards_one(
       object: {
@@ -104,12 +109,14 @@ export const INSERT_CARD = gql`
         description: $description
         column_id: $column_id
         board_id: $board_id
+        position: $position
       }
     ) {
       id
       title
       description
       columnId: column_id
+      position
     }
   }
 `;
@@ -123,13 +130,14 @@ export const DELETE_CARD = gql`
 `;
 
 export const UPDATE_CARD = gql`
-  mutation UpdateCard($id: String!, $column_id: String!) {
+  mutation UpdateCard($id: String!, $column_id: String!, $position: Float!) {
     update_cards_by_pk(
       pk_columns: { id: $id }
-      _set: { column_id: $column_id }
+      _set: { column_id: $column_id, position: $position }
     ) {
       id
       columnId: column_id
+      position
     }
   }
 `;

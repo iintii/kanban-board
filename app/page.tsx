@@ -57,7 +57,19 @@ const HomePage = ({ boardId }: HomePageProps) => {
   const boardTitle = boardData?.boards_by_pk?.title || "Board";
 
   const handleAddCard = async (newCard: CardType) => {
-    setLocalCards((prev) => [...prev, newCard]);
+    // Calculate position for new card (add to end of column with gap)
+    const cardsInColumn = localCards.filter(
+      (card) => card.columnId === newCard.columnId
+    );
+    const maxPosition =
+      cardsInColumn.length > 0
+        ? Math.max(...cardsInColumn.map((c) => c.position))
+        : 0;
+    const position = maxPosition + 10.0;
+
+    const cardWithPosition = { ...newCard, position };
+    setLocalCards((prev) => [...prev, cardWithPosition]);
+
     await insertCard({
       variables: {
         id: newCard.id,
@@ -65,6 +77,7 @@ const HomePage = ({ boardId }: HomePageProps) => {
         description: newCard.description,
         column_id: newCard.columnId,
         board_id: boardId,
+        position: position,
       },
     });
   };
@@ -76,25 +89,49 @@ const HomePage = ({ boardId }: HomePageProps) => {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
-    if (!destination || destination.droppableId === source.droppableId) return;
+    if (!destination) return;
 
     setLocalCards((prev) => {
-      const newCards = [...prev];
-      const cardIndex = newCards.findIndex((c) => c.id === draggableId);
-      if (cardIndex !== -1) {
-        newCards[cardIndex] = {
-          ...newCards[cardIndex],
-          columnId: destination.droppableId,
-        };
-      }
-      return newCards;
-    });
+      const card = prev.find((c) => c.id === draggableId);
+      if (!card) return prev;
 
-    updateCard({
-      variables: {
-        id: draggableId,
-        column_id: destination.droppableId,
-      },
+      const destCards = prev
+        .filter(
+          (c) => c.columnId === destination.droppableId && c.id !== draggableId
+        )
+        .sort((a, b) => a.position - b.position);
+
+      // Find neighbors
+      const before = destCards[destination.index - 1];
+      const after = destCards[destination.index];
+
+      let newPos;
+      if (!before && !after) {
+        newPos = 10.0; // only card in column
+      } else if (!before) {
+        newPos = after.position / 2;
+      } else if (!after) {
+        newPos = before.position + 10.0;
+      } else {
+        newPos = (before.position + after.position) / 2;
+      }
+
+      const updatedCard = {
+        ...card,
+        columnId: destination.droppableId,
+        position: newPos,
+      };
+
+      // Persist only dragged card - THIS SAVES TO DATABASE
+      updateCard({
+        variables: {
+          id: updatedCard.id,
+          column_id: updatedCard.columnId,
+          position: updatedCard.position,
+        },
+      });
+
+      return prev.map((c) => (c.id === card.id ? updatedCard : c));
     });
   };
 

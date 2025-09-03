@@ -42,7 +42,9 @@ const Column = ({ column, cards, onAddCard, onDeleteCard }: ColumnProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const cardsInCol = cards.filter((card) => card.columnId === column.id);
+  const cardsInCol = cards
+    .filter((card) => card.columnId === column.id)
+    .sort((a, b) => a.position - b.position);
 
   const resetForm = () => {
     setTitle("");
@@ -59,6 +61,7 @@ const Column = ({ column, cards, onAddCard, onDeleteCard }: ColumnProps) => {
       title: title.trim(),
       description: description.trim(),
       columnId: column.id,
+      position: 0, // Temporary position, will be calculated in handleAddCard
     });
     resetForm();
   };
@@ -137,6 +140,7 @@ const Column = ({ column, cards, onAddCard, onDeleteCard }: ColumnProps) => {
                 size="sm"
                 variant="outline"
                 onClick={resetForm}
+                className="text-black"
               >
                 Cancel
               </Button>

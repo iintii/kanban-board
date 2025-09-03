@@ -1,6 +1,11 @@
 "use client";
 import { useSubscription, useMutation } from "@apollo/client";
-import { SUBSCRIBE_BOARDS, INSERT_BOARD, INSERT_COLUMN, DELETE_BOARD } from "@/lib/queries";
+import {
+  SUBSCRIBE_BOARDS,
+  INSERT_BOARD,
+  INSERT_COLUMN,
+  DELETE_BOARD,
+} from "@/lib/queries";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,22 +24,24 @@ const BoardsPage = () => {
   const createBoard = async () => {
     const title = prompt("Board name:");
     if (!title) return;
-    
+
     const newBoardId = `board-${Date.now()}`;
-    
+
     try {
       await insertBoard({
-        variables: { id: newBoardId, title: title.trim() }
+        variables: { id: newBoardId, title: title.trim() },
       });
-      
+
       const defaultColumns = [
         { title: "To Do", position: 0 },
         { title: "In Progress", position: 1 },
         { title: "Done", position: 2 },
       ];
-      
+
       for (const col of defaultColumns) {
-        const colId = `col-${col.title.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
+        const colId = `col-${col.title
+          .toLowerCase()
+          .replace(/\s+/g, "-")}-${Date.now()}`;
         await insertColumn({
           variables: {
             id: colId,
@@ -44,23 +51,29 @@ const BoardsPage = () => {
           },
         });
       }
-      
+
       router.push(`/boards/${newBoardId}`);
     } catch (error) {
       console.error("Error creating board:", error);
     }
   };
 
-  const handleDeleteBoard = async (boardId: string, boardTitle: string, e: React.MouseEvent) => {
+  const handleDeleteBoard = async (
+    boardId: string,
+    boardTitle: string,
+    e: React.MouseEvent
+  ) => {
     e.preventDefault(); // Prevent Link navigation
     e.stopPropagation();
-    
-    const confirmDelete = confirm(`Are you sure you want to delete "${boardTitle}"? This action cannot be undone.`);
+
+    const confirmDelete = confirm(
+      `Are you sure you want to delete "${boardTitle}"? This action cannot be undone.`
+    );
     if (!confirmDelete) return;
-    
+
     try {
       await deleteBoard({
-        variables: { id: boardId }
+        variables: { id: boardId },
       });
     } catch (error) {
       console.error("Error deleting board:", error);
@@ -77,7 +90,7 @@ const BoardsPage = () => {
         <h1 className="text-2xl font-bold">My Boards</h1>
         <Button onClick={createBoard}>+ Create Board</Button>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {boards.map((board: any) => (
           <div key={board.id} className="relative group">
