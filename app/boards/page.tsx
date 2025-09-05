@@ -33,9 +33,11 @@ const BoardsPage = () => {
       });
 
       const defaultColumns = [
-        { title: "To Do", position: 0 },
-        { title: "In Progress", position: 1 },
-        { title: "Done", position: 2 },
+        { title: "Stuck", position: 0 },
+        { title: "Not Started", position: 1 },
+        { title: "Working On It", position: 2 },
+        { title: "Done", position: 3 },
+        { title: "Test", position: 4 },
       ];
 
       for (const col of defaultColumns) {

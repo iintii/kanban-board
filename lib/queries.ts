@@ -1,48 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_COLUMNS = gql`
-  query GetColumns {
-    columns(order_by: { position: asc }) {
-      id
-      title
-      position
-    }
-  }
-`;
-
-export const GET_CARDS = gql`
-  query GetCards {
-    cards(order_by: { position: asc }) {
-      id
-      title
-      description
-      columnId: column_id
-      position
-      created_at
-    }
-  }
-`;
-
-export const SUBSCRIBE_COLUMNS = gql`
-  subscription ColumnsSub {
-    columns(order_by: { position: asc }) {
-      id
-      title
-    }
-  }
-`;
-
-export const SUBSCRIBE_CARDS = gql`
-  subscription CardsSub {
-    cards {
-      id
-      title
-      description
-      columnId: column_id
-    }
-  }
-`;
-
 export const SUBSCRIBE_BOARDS = gql`
   subscription SubscribeBoards {
     boards(order_by: { created_at: desc }) {

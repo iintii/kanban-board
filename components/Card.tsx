@@ -1,6 +1,5 @@
 import React from "react";
 import { Card as CardType } from "@/types/Card";
-import { Button } from "@/components/ui/button";
 
 type CardProps = {
   card: CardType;
