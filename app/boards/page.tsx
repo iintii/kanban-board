@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import AuthWrapper from "@/components/AuthWrapper";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
+import { Board } from "@/types/Card";
 
 const BoardsPage = () => {
   const { data, loading, error } = useSubscription(SUBSCRIBE_BOARDS);
@@ -55,7 +56,7 @@ const BoardsPage = () => {
       }
 
       router.push(`/boards/${newBoardId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error creating board:", error);
     }
   };
@@ -94,7 +95,7 @@ const BoardsPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {boards.map((board: any) => (
+        {boards.map((board: Board) => (
           <div key={board.id} className="relative group">
             <Link href={`/boards/${board.id}`}>
               <Card className="hover:shadow-lg transition-shadow cursor-pointer">

@@ -13,3 +13,9 @@ export type Column = {
   //we dont need to define card type [we could use that approach cards:card[]]. each card will be pointing to the appropriate column. This is simpler
   board_id?: string; // Add this line
 };
+
+export type Board = {
+  id: string;
+  title: string;
+  created_at?: string;
+};

@@ -88,7 +88,7 @@ const HomePage = ({ boardId }: HomePageProps) => {
   };
 
   const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
+    const { destination, draggableId } = result;
     if (!destination) return;
 
     setLocalCards((prev) => {

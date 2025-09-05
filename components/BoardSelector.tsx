@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuthenticationStatus } from "@nhost/nextjs";
+import { Board } from "@/types/Card";
 
 export default function BoardSelector() {
   const { isAuthenticated } = useAuthenticationStatus();
@@ -44,7 +45,7 @@ export default function BoardSelector() {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="boards-list">📋 All Boards</SelectItem>
-        {boards.map((board: any) => (
+        {boards.map((board: Board) => (
           <SelectItem key={board.id} value={board.id}>
             {board.title}
           </SelectItem>
